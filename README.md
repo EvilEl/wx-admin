@@ -1,6 +1,5 @@
 ## WX-ADMIN
 
-
 ## Commit types
 
 | Commit Type | Title                    | Description                                                                                                   | Emoji |
