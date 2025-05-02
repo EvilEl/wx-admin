@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import AppSidebar from '@/components/AppSidebar.vue'
+
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { Theme } from '@/components/ui/theme'
+
+// Pass { disableTransition: false } to enable transitions
 </script>
 
 <template>
@@ -8,6 +12,7 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
     <AppSidebar />
     <main>
       <SidebarTrigger />
+      <Theme />
       <RouterView />
     </main>
   </SidebarProvider>

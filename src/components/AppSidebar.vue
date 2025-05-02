@@ -10,7 +10,6 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 import { Calendar, Home, Inbox, Search, Settings } from 'lucide-vue-next'
-
 // Menu items.
 const items = [
   {
