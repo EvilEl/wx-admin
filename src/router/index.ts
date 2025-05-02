@@ -1,6 +1,6 @@
 import { useUser } from '@/composables/useUser'
 import { createRouter, createWebHistory } from 'vue-router'
-import { routes } from './routers'
+import { routes } from './routes'
 import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 
 const router = createRouter({

@@ -4,39 +4,29 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
-import { Calendar, Home, Inbox, Search, Settings } from 'lucide-vue-next'
-// Menu items.
+import { Box, Home, ScanLine } from 'lucide-vue-next'
+
 const items = [
   {
-    title: 'Home',
-    url: '#',
+    title: 'Главная',
+    url: '/',
     icon: Home,
   },
   {
-    title: 'Inbox',
-    url: '#',
-    icon: Inbox,
+    title: 'Товары',
+    url: 'products',
+    icon: Box,
   },
   {
-    title: 'Calendar',
-    url: '#',
-    icon: Calendar,
+    title: 'Товар',
+    url: 'product',
+    icon: ScanLine,
   },
-  {
-    title: 'Search',
-    url: '#',
-    icon: Search,
-  },
-  {
-    title: 'Settings',
-    url: '#',
-    icon: Settings,
-  },
+
 ]
 </script>
 
@@ -44,7 +34,6 @@ const items = [
   <Sidebar>
     <SidebarContent>
       <SidebarGroup>
-        <SidebarGroupLabel>Application</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
             <SidebarMenuItem v-for="item in items" :key="item.title">
