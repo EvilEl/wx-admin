@@ -3,7 +3,7 @@
 # Login - admin
 # Password - WaxSystem
 
-# Для работы Api требуется собрать докер образ этого [репозитиория]([/guides/content/editing-an-existing-page](https://github.com/EvilEl/wx-api))
+# Для работы Api требуется собрать докер образ этого [репозитиория]([/guides/content/editing-an-existing-page](https://github.com/EvilEl/wx-api)
 
 
 
