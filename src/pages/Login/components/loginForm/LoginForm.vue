@@ -5,11 +5,13 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useUser } from '@/composables/useUser'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const { login: loginUser, isLoading, error } = useUser()
 const login = ref('')
 const password = ref('')
 const showPassword = ref(false)
+const router = useRouter()
 
 async function onSubmit() {
   try {
@@ -17,6 +19,7 @@ async function onSubmit() {
       login: login.value,
       password: password.value,
     })
+    router.push({ name: 'root' })
   } catch (error) {
     console.error('Login failed:', error)
   }

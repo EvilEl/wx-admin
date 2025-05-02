@@ -5,18 +5,14 @@ interface LoginCredentials {
   password: string
 }
 
-interface User {
+export interface User {
   id: string
   login: string
-}
-
-interface AuthResponse {
-  data: User
   token: string
 }
 
 export const authApi = {
-  login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
+  login: async (credentials: LoginCredentials): Promise<User> => {
     const response = await axiosInstance.post('login', credentials)
     return response.data
   },
