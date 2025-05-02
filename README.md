@@ -1,5 +1,11 @@
 ## WX-ADMIN
 
+# Login - admin
+# Password - WaxSystem
+
+#Для работы Api требуется собрать докер образ этого (репозитиория)[https://github.com/EvilEl/wx-api]
+
+
 ## Commit types
 
 | Commit Type | Title                    | Description                                                                                                   | Emoji |
