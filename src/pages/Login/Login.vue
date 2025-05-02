@@ -1,10 +1,7 @@
 <script setup lang="ts">
-
+import { LoginForm } from './components/loginForm'
 </script>
 
 <template>
-  <div>
-    Login
-    <slot />
-  </div>
+  <LoginForm />
 </template>
