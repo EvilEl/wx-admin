@@ -1,4 +1,5 @@
 import { useUser } from '@/composables/useUser'
+import { useStorage } from '@vueuse/core'
 import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from './routes'
 import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
@@ -8,15 +9,13 @@ const router = createRouter({
   routes,
 })
 
-const { user } = useUser()
+const user = useStorage('user', null)
 
 function authenticateUser(
   to: RouteLocationNormalized,
   from: RouteLocationNormalized,
   next: NavigationGuardNext,
 ) {
-  console.log(user)
-
   if (!user.value && !to.path.includes('/login')) {
     return next({ name: 'login' })
   } else if (user.value && to.path.includes('/login')) {

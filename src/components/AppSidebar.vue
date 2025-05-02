@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
 import {
   Sidebar,
   SidebarContent,
@@ -8,7 +9,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
+import { useUser } from '@/composables/useUser'
 import { Box, Home, ScanLine } from 'lucide-vue-next'
+
+const { logout } = useUser()
 
 const items = [
   {
@@ -44,6 +48,10 @@ const items = [
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>
+
+            <Button @click="logout">
+              Выйти
+            </Button>
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>
