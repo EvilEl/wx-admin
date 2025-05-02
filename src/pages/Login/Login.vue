@@ -3,7 +3,5 @@ import { LoginForm } from './components/loginForm'
 </script>
 
 <template>
-  <div>
-    <LoginForm />
-  </div>
+  <LoginForm />
 </template>

@@ -1,17 +1,24 @@
 <script setup lang="ts">
+import { axiosInstance } from '@/api'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ref } from 'vue'
 
-const text = ref('')
+const login = ref('')
 const password = ref('')
 const showPassword = ref(false)
 
-function onSubmit() {
-  // Здесь обработка логина
-  alert(`Email: ${text.value}\nPassword: ${password.value}`)
+async function onSubmit(e) {
+  try {
+    await axiosInstance.post('login', {
+      login: login.value,
+      password: password.value,
+    })
+  } catch (error) {
+    console.error('Login error:', error)
+  }
 }
 </script>
 
@@ -22,7 +29,7 @@ function onSubmit() {
     </h2>
     <div>
       <Label class="flex flex-col items-start">Логин
-        <Input v-model="text" type="text" placeholder="Логин" required class="mt-1" />
+        <Input v-model="login" type="text" placeholder="Логин" required class="mt-1" />
       </Label>
     </div>
     <div>

@@ -10,5 +10,7 @@ RUN pnpm install
 
 COPY . .
 
+ENV VITE_API_PORT="3000"
+
 EXPOSE 5173
 CMD [ "pnpm", "dev" ]
