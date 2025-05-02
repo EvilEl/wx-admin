@@ -1,23 +1,24 @@
 <script setup lang="ts">
-import { axiosInstance } from '@/api'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useUser } from '@/composables/useUser'
 import { ref } from 'vue'
 
+const { login: loginUser, isLoading, error } = useUser()
 const login = ref('')
 const password = ref('')
 const showPassword = ref(false)
 
-async function onSubmit(e) {
+async function onSubmit() {
   try {
-    await axiosInstance.post('login', {
+    await loginUser({
       login: login.value,
       password: password.value,
     })
   } catch (error) {
-    console.error('Login error:', error)
+    console.error('Login failed:', error)
   }
 }
 </script>
@@ -27,6 +28,9 @@ async function onSubmit(e) {
     <h2 class="text-2xl font-semibold text-center mb-4">
       Login
     </h2>
+    <div v-if="error" class="text-red-500 text-sm">
+      {{ error }}
+    </div>
     <div>
       <Label class="flex flex-col items-start">Логин
         <Input v-model="login" type="text" placeholder="Логин" required class="mt-1" />
@@ -47,8 +51,8 @@ async function onSubmit(e) {
         <Label for="showPassword" class="ml-2 text-sm">Показать пароль</Label>
       </div>
     </div>
-    <Button type="submit" class="w-full">
-      Войти
+    <Button type="submit" class="w-full" :disabled="isLoading">
+      {{ isLoading ? 'Загрузка...' : 'Войти' }}
     </Button>
   </form>
 </template>
