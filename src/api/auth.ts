@@ -1,4 +1,4 @@
-import { axiosInstance } from './'
+import { useAuthApi } from '@/composables/useAuthApi'
 
 interface LoginCredentials {
   login: string
@@ -11,13 +11,18 @@ export interface User {
   token: string
 }
 
-export const authApi = {
-  login: async (credentials: LoginCredentials): Promise<User> => {
-    const response = await axiosInstance.post('login', credentials)
-    return response.data
-  },
+export function authApi() {
+  const api = useAuthApi()
 
-  logout: async (): Promise<void> => {
-    await axiosInstance.post('logout')
-  },
+  async function authenticate(credentials: LoginCredentials) {
+    if (!api.value) {
+      return
+    }
+    const response = await api.value.post('login', credentials)
+    return response.data
+  }
+
+  return {
+    authenticate,
+  }
 }

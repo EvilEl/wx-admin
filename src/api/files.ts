@@ -1,4 +1,4 @@
-import { axiosInstance } from './'
+import { useApi } from '@/composables/useApi'
 
 export interface ProductFile {
   filename: string
@@ -11,15 +11,26 @@ export interface ProductFile {
 
 }
 
-export const filesApi = {
-  createFile: async (data: ProductFile): Promise<unknown> => {
-    return await axiosInstance.post('files/product', data)
-  },
+export function filesApi() {
+  const api = useApi()
 
-  getFilesProduct: async (id: number): Promise<ProductFile[]> => {
-    return (await axiosInstance.get(`files/product/${id}`, {
+  async function createFile(data: ProductFile): Promise<unknown> {
+    if (!api.value) {
+      return
+    }
+    return await api.value.post('files/product', data)
+  }
 
+  async function getFilesProduct(id: number): Promise<ProductFile[]> {
+    if (!api.value) {
+      return []
+    }
+    return (await api.value.get(`files/product/${id}`, {
     })).data
-  },
+  }
 
+  return {
+    createFile,
+    getFilesProduct,
+  }
 }

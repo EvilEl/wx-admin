@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { filesApi } from '@/api/files'
+
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -17,17 +18,18 @@ import { onMounted, ref } from 'vue'
 
 import { useProduct } from './composables/useProduct'
 
+const api = filesApi()
 const { products, selectedProduct } = useProduct()
 
 const files = ref<File[] | null>(null)
 const images = ref<string[]>([])
 
 onMounted(() => {
-  getFilesProduct()
+  getFilesProduct(1)
 })
 
 async function getFilesProduct(id: number = 1) {
-  const files = await filesApi.getFilesProduct(1)
+  const files = await api.getFilesProduct(id)
   if (files.length === 0) {
     return
   }
@@ -56,7 +58,7 @@ async function sendFiles() {
         link: '',
         base64,
       }
-      filesApi.createFile(data)
+      api.createFile(data)
     } catch (error) {
       console.log(error)
     }
