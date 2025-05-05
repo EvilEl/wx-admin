@@ -13,62 +13,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { toBase64 } from '@/lib/utils'
-import { onMounted, ref } from 'vue'
+import { useProductFiles } from '@/composables/useProductFiles'
 
+import { onMounted, ref } from 'vue'
 import { useProduct } from './composables/useProduct'
 
-const api = filesApi()
 const { products, selectedProduct } = useProduct()
-
-const files = ref<File[] | null>(null)
-const images = ref<string[]>([])
+const { images, sendFile, getFilesProduct, onChangeFiles } = useProductFiles()
 
 onMounted(() => {
   getFilesProduct(1)
 })
-
-async function getFilesProduct(id: number = 1) {
-  const files = await api.getFilesProduct(id)
-  if (files.length === 0) {
-    return
-  }
-
-  console.log(files)
-
-  files.forEach(item => {
-    images.value.push(item.base64)
-  })
-}
-
-async function sendFiles() {
-  if (!files.value) {
-    return
-  }
-  for (const file of files.value) {
-    try {
-      const base64 = await toBase64(file)
-      images.value.push(base64)
-      const data = {
-        filename: file.name,
-        idProduct: 1,
-        originalname: file.name,
-        mimeType: file.type,
-        size: file.size,
-        link: '',
-        base64,
-      }
-      api.createFile(data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  files.value = []
-}
-
-function onChangeFiles(e) {
-  files.value = e.target.files
-}
 </script>
 
 <template>
@@ -97,7 +52,7 @@ function onChangeFiles(e) {
       <img class="w-20 h-20" :src="img" alt="">
     </div>
 
-    <Button @click="sendFiles">
+    <Button @click="sendFile">
       загрузить файлы
     </Button>
   </div>
