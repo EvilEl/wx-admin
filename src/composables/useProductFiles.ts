@@ -19,7 +19,8 @@ export function useProductFiles() {
     if (!selectedFiles.value.length) {
       return
     }
-    for (const file of selectedFiles.value) {
+
+    const tasks = selectedFiles.value.map(async (file) => {
       try {
         const base64 = await toBase64(file)
         const data = {
@@ -34,14 +35,20 @@ export function useProductFiles() {
         await api.createFile(data)
         files.value.push(data)
       } catch (error) {
-        console.log(error)
+        console.error('Ошибка обработки файла:', file.name, error)
       }
-    }
+    })
+
+    await Promise.all(tasks)
     selectedFiles.value = []
   }
 
-  function onChangeFiles(e) {
-    selectedFiles.value = e.target.files
+  function onChangeFiles(e: Event) {
+    const files = (e.target as HTMLInputElement).files
+    if (!files) {
+      return
+    }
+    selectedFiles.value = [...files]
   }
 
   return {
