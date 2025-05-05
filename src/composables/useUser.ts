@@ -1,14 +1,15 @@
 import { authApi } from '@/api/auth'
-import { createGlobalState, StorageSerializers, useStorage } from '@vueuse/core'
+import { createSharedComposable, StorageSerializers, useStorage } from '@vueuse/core'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { User } from '@/api/auth'
 
-export const useUser = createGlobalState(() => {
+export const useUser = createSharedComposable(() => {
   const user = useStorage<User | null>('user', null, undefined, {
     serializer: StorageSerializers.object,
   })
   const router = useRouter()
+  const { authenticate } = authApi()
   const isLoading = ref(false)
   const error = ref<string | null>(null)
 
@@ -16,7 +17,7 @@ export const useUser = createGlobalState(() => {
     try {
       isLoading.value = true
       error.value = null
-      const response = await authApi.login(credentials)
+      const response = await authenticate(credentials)
       user.value = response
       router.push({ name: 'root' })
     } catch (err) {

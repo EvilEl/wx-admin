@@ -30,7 +30,6 @@ const items = [
     url: 'product',
     icon: ScanLine,
   },
-
 ]
 </script>
 
