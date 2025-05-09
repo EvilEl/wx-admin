@@ -1,18 +1,14 @@
 <script setup lang="ts">
 import { filesApi } from '@/api/files'
-
 import { Button } from '@/components/ui/button'
 import {
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-
 import {
   Select,
   SelectContent,
@@ -22,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { useCreateProduct } from '@/composables/useCreateProduct'
 import { useProductFiles } from '@/composables/useProductFiles'
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
@@ -30,14 +27,21 @@ import * as z from 'zod'
 import { useProduct } from './composables/useProduct'
 
 const formSchema = toTypedSchema(z.object({
-  username: z.string().min(2).max(50),
+  name: z.string().min(2).max(50),
+  price: z.number().min(0).max(10000000).default(0),
+  count: z.number().min(0).max(100000).default(0),
 }))
 
+const { createCandle ,errMessage } = useCreateProduct()
 const { products, selectedProduct } = useProduct()
 const { images, sendFile, getFilesProduct, onChangeFiles } = useProductFiles()
 
 const form = useForm({
   validationSchema: formSchema,
+})
+
+const onSubmit = form.handleSubmit((values) => {
+  createCandle(values)
 })
 
 onMounted(() => {
@@ -47,25 +51,8 @@ onMounted(() => {
 
 <template>
   <div class="p-10">
-    <form @submit="onSubmit">
-      <FormField v-slot="{ componentField }" name="username">
-        <FormItem>
-          <FormLabel>Username</FormLabel>
-          <FormControl>
-            <Input type="text" placeholder="shadcn" v-bind="componentField" />
-          </FormControl>
-          <FormDescription>
-            This is your public display name.
-          </FormDescription>
-          <FormMessage />
-        </FormItem>
-      </FormField>
-      <Button type="submit">
-        Submit
-      </Button>
-    </form>
-    <Select v-model="selectedProduct">
-      <SelectTrigger>
+    <!-- <Select v-model="selectedProduct">
+      <SelectTrigger class="w-full">
         <SelectValue placeholder="Выберите товар" />
       </SelectTrigger>
       <SelectContent>
@@ -76,9 +63,43 @@ onMounted(() => {
           </SelectItem>
         </SelectGroup>
       </SelectContent>
-    </Select>
+    </Select> -->
+    <form class="grid grid-cols-[1fr_1fr] gap-1" @submit="onSubmit">
+      <FormField v-slot="{ componentField }" name="name" error-message="хуй">
+        <FormItem>
+          <FormLabel>Наименование</FormLabel>
+          <FormControl>
+            <Input type="text" placeholder="Наименование" v-bind="componentField" />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      </FormField>
+      <FormField v-slot="{ componentField }" name="price">
+        <FormItem>
+          <FormLabel>Цена</FormLabel>
+          <FormControl>
+            <Input type="number" placeholder="Цена" v-bind="componentField" />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      </FormField>
+      <FormField v-slot="{ componentField }" name="count">
+        <FormItem>
+          <FormLabel>Количество</FormLabel>
+          <FormControl>
+            <Input type="number" placeholder="Количество" v-bind="componentField" />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      </FormField>
+      <Button class="col-span-2" type="submit">
+        Создать
+      </Button>
+    </form>
 
-    <input type="text">
+    <div>
+      {{ errMessage }}
+    </div>
 
     <!-- <div class="grid w-full max-w-sm items-center gap-1.5">
       <Label for="picture">Picture</Label>
@@ -93,3 +114,7 @@ onMounted(() => {
     </Button> -->
   </div>
 </template>
+
+<style>
+
+</style>
