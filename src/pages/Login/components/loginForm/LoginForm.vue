@@ -24,6 +24,7 @@ async function onSubmit() {
 </script>
 
 <template>
+  <!-- TODO переписать на vee-validate -->
   <form class="max-w-sm mx-auto mt-10 p-8 border rounded-lg shadow space-y-6 bg-white" @submit.prevent="onSubmit">
     <h2 class="text-2xl font-semibold text-center mb-4">
       Login

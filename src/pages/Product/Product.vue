@@ -2,8 +2,17 @@
 import { filesApi } from '@/api/files'
 
 import { Button } from '@/components/ui/button'
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+
 import {
   Select,
   SelectContent,
@@ -14,12 +23,22 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useProductFiles } from '@/composables/useProductFiles'
-
+import { toTypedSchema } from '@vee-validate/zod'
+import { useForm } from 'vee-validate'
 import { onMounted, ref } from 'vue'
+import * as z from 'zod'
 import { useProduct } from './composables/useProduct'
+
+const formSchema = toTypedSchema(z.object({
+  username: z.string().min(2).max(50),
+}))
 
 const { products, selectedProduct } = useProduct()
 const { images, sendFile, getFilesProduct, onChangeFiles } = useProductFiles()
+
+const form = useForm({
+  validationSchema: formSchema,
+})
 
 onMounted(() => {
   getFilesProduct(1)
@@ -27,7 +46,24 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div class="p-10">
+    <form @submit="onSubmit">
+      <FormField v-slot="{ componentField }" name="username">
+        <FormItem>
+          <FormLabel>Username</FormLabel>
+          <FormControl>
+            <Input type="text" placeholder="shadcn" v-bind="componentField" />
+          </FormControl>
+          <FormDescription>
+            This is your public display name.
+          </FormDescription>
+          <FormMessage />
+        </FormItem>
+      </FormField>
+      <Button type="submit">
+        Submit
+      </Button>
+    </form>
     <Select v-model="selectedProduct">
       <SelectTrigger>
         <SelectValue placeholder="Выберите товар" />
@@ -44,7 +80,7 @@ onMounted(() => {
 
     <input type="text">
 
-    <div class="grid w-full max-w-sm items-center gap-1.5">
+    <!-- <div class="grid w-full max-w-sm items-center gap-1.5">
       <Label for="picture">Picture</Label>
       <Input id="picture" multiple type="file" accept="image/*" @change="onChangeFiles" />
     </div>
@@ -54,6 +90,6 @@ onMounted(() => {
 
     <Button @click="sendFile">
       загрузить файлы
-    </Button>
+    </Button> -->
   </div>
 </template>

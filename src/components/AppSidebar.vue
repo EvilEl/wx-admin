@@ -11,23 +11,24 @@ import {
 } from '@/components/ui/sidebar'
 import { useUser } from '@/composables/useUser'
 import { Box, Home, ScanLine } from 'lucide-vue-next'
+import { RouterLink } from 'vue-router'
 
 const { logout } = useUser()
 
 const items = [
   {
     title: 'Главная',
-    url: '/',
+    name: 'root',
     icon: Home,
   },
   {
     title: 'Товары',
-    url: 'products',
+    name: 'products',
     icon: Box,
   },
   {
     title: 'Товар',
-    url: 'product',
+    name: 'product',
     icon: ScanLine,
   },
 ]
@@ -41,10 +42,10 @@ const items = [
           <SidebarMenu>
             <SidebarMenuItem v-for="item in items" :key="item.title">
               <SidebarMenuButton as-child>
-                <a :href="item.url">
+                <RouterLink :to="{ name: item.name }">
                   <component :is="item.icon" />
                   <span>{{ item.title }}</span>
-                </a>
+                </RouterLink>
               </SidebarMenuButton>
             </SidebarMenuItem>
 

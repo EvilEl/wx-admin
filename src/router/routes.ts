@@ -1,5 +1,4 @@
 export const routes = [
-
   {
     path: '/',
     name: 'root',
@@ -22,5 +21,4 @@ export const routes = [
     name: 'login',
     component: () => import('@/pages/Login/Login.vue'),
   },
-
 ]
