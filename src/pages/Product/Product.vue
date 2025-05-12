@@ -27,12 +27,12 @@ import * as z from 'zod'
 import { useProduct } from './composables/useProduct'
 
 const formSchema = toTypedSchema(z.object({
-  name: z.string().min(2).max(50),
-  price: z.number().min(0).max(10000000).default(0),
-  count: z.number().min(0).max(100000).default(0),
+  name: z.string({ message: 'Заполните поле' }),
+  price: z.number({ message: 'Заполните поле' }).min(1, { message: 'Минимальное значение 1' }).max(10000000, { message: 'Максимальное значение 10000000' }).default(1),
+  count: z.number({ message: 'Заполните поле' }).min(1, { message: 'Минимальное значение 1' }).max(100000, { message: 'Максимальное значение 100000' }).default(1),
 }))
 
-const { createCandle ,errMessage } = useCreateProduct()
+const { createCandle, errMessage } = useCreateProduct()
 const { products, selectedProduct } = useProduct()
 const { images, sendFile, getFilesProduct, onChangeFiles } = useProductFiles()
 
