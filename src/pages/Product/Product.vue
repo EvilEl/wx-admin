@@ -27,6 +27,7 @@ import * as z from 'zod'
 import { useProduct } from './composables/useProduct'
 
 const formSchema = toTypedSchema(z.object({
+  group: z.string({ message: 'Требуется выбрать продукт' }),
   name: z.string({ message: 'Заполните поле' }),
   price: z.number({ message: 'Заполните поле' }).min(1, { message: 'Минимальное значение 1' }).max(10000000, { message: 'Максимальное значение 10000000' }).default(1),
   count: z.number({ message: 'Заполните поле' }).min(1, { message: 'Минимальное значение 1' }).max(100000, { message: 'Максимальное значение 100000' }).default(1),
@@ -41,7 +42,8 @@ const form = useForm({
 })
 
 const onSubmit = form.handleSubmit((values) => {
-  createCandle(values)
+  console.log('values', values)
+  // createCandle(values)
 })
 
 onMounted(() => {
@@ -51,21 +53,30 @@ onMounted(() => {
 
 <template>
   <div class="p-10">
-    <!-- <Select v-model="selectedProduct">
-      <SelectTrigger class="w-full">
-        <SelectValue placeholder="Выберите товар" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Выберите товар</SelectLabel>
-          <SelectItem v-for="product of products" :key="product.id" :value="product.id">
-            {{ product.text }}
-          </SelectItem>
-        </SelectGroup>
-      </SelectContent>
-    </Select> -->
-    <form class="grid grid-cols-[1fr_1fr] gap-1" @submit="onSubmit">
-      <FormField v-slot="{ componentField }" name="name" error-message="хуй">
+    <form class="group" @submit="onSubmit">
+      <FormField v-slot="{ componentField }" name="group">
+        <FormItem>
+          <FormLabel>Продукт</FormLabel>
+          <FormControl>
+            <Select v-model="selectedProduct" v-bind="componentField">
+              <SelectTrigger class="w-full">
+                <SelectValue placeholder="Выберите продукт" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Выберите продукт</SelectLabel>
+                  <SelectItem v-for="product of products" :key="product.id" :value="product.id">
+                    {{ product.text }}
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      </FormField>
+
+      <FormField v-slot="{ componentField }" name="name">
         <FormItem>
           <FormLabel>Наименование</FormLabel>
           <FormControl>
@@ -97,10 +108,6 @@ onMounted(() => {
       </Button>
     </form>
 
-    <div>
-      {{ errMessage }}
-    </div>
-
     <!-- <div class="grid w-full max-w-sm items-center gap-1.5">
       <Label for="picture">Picture</Label>
       <Input id="picture" multiple type="file" accept="image/*" @change="onChangeFiles" />
@@ -115,6 +122,8 @@ onMounted(() => {
   </div>
 </template>
 
-<style>
-
+<style scoped>
+ .group > *:not(:last-child) {
+  margin-bottom: 0.5rem;
+ }
 </style>
