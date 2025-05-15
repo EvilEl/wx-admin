@@ -1,10 +1,10 @@
 import { authApi } from '@/api/auth'
-import { createSharedComposable, StorageSerializers, useStorage } from '@vueuse/core'
+import { createGlobalState, StorageSerializers, useStorage } from '@vueuse/core'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { User } from '@/api/auth'
 
-export const useUser = createSharedComposable(() => {
+export const useUser = createGlobalState(() => {
   const user = useStorage<User | null>('user', null, undefined, {
     serializer: StorageSerializers.object,
   })
