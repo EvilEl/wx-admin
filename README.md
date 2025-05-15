@@ -5,8 +5,6 @@
 
 # Для работы Api требуется собрать докер образ этого [репозитория](https://github.com/EvilEl/wx-api)
 
-
-
 ## Commit types
 
 | Commit Type | Title                    | Description                                                                                                   | Emoji |

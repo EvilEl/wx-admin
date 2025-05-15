@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { filesApi } from '@/api/files'
 import { Button } from '@/components/ui/button'
 import {
   FormControl,
@@ -22,9 +21,10 @@ import { useCreateProduct } from '@/composables/useCreateProduct'
 import { useProductFiles } from '@/composables/useProductFiles'
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import * as z from 'zod'
 import { useProduct } from './composables/useProduct'
+import type { ICreateProduct } from '@/composables/useCreateProduct'
 
 const formSchema = toTypedSchema(z.object({
   group: z.string({ message: 'Требуется выбрать продукт' }),
@@ -33,7 +33,7 @@ const formSchema = toTypedSchema(z.object({
   count: z.number({ message: 'Заполните поле' }).min(1, { message: 'Минимальное значение 1' }).max(100000, { message: 'Максимальное значение 100000' }).default(1),
 }))
 
-const { createCandle, errMessage } = useCreateProduct()
+const { createProduct, errMessage } = useCreateProduct()
 const { products, selectedProduct } = useProduct()
 const { images, sendFile, getFilesProduct, onChangeFiles } = useProductFiles()
 
@@ -42,8 +42,7 @@ const form = useForm({
 })
 
 const onSubmit = form.handleSubmit((values) => {
-  console.log('values', values)
-  // createCandle(values)
+  createProduct((values as ICreateProduct))
 })
 
 onMounted(() => {
@@ -106,6 +105,7 @@ onMounted(() => {
       <Button class="col-span-2" type="submit">
         Создать
       </Button>
+      {{ errMessage }}
     </form>
 
     <!-- <div class="grid w-full max-w-sm items-center gap-1.5">

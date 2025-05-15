@@ -1,4 +1,3 @@
-import { useUser } from '@/composables/useUser'
 import { useStorage } from '@vueuse/core'
 import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from './routes'

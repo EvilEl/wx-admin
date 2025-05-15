@@ -1,4 +1,4 @@
 import type { InjectionKey } from 'vue'
 
-export const FORM_ITEM_INJECTION_KEY
-  = Symbol() as InjectionKey<string>
+// eslint-disable-next-line symbol-description
+export const FORM_ITEM_INJECTION_KEY = Symbol() as InjectionKey<string>
