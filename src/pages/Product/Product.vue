@@ -18,7 +18,6 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useCreateProduct } from '@/composables/useCreateProduct'
-import { useProductFiles } from '@/composables/useProductFiles'
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
 import { onMounted } from 'vue'
@@ -35,7 +34,7 @@ const formSchema = toTypedSchema(z.object({
 
 const { createProduct, errMessage } = useCreateProduct()
 const { products, selectedProduct } = useProduct()
-const { images, sendFile, getFilesProduct, onChangeFiles } = useProductFiles()
+// const { images, sendFile, getFilesProduct, onChangeFiles } = useProductFiles()
 
 const form = useForm({
   validationSchema: formSchema,
@@ -46,7 +45,7 @@ const onSubmit = form.handleSubmit((values) => {
 })
 
 onMounted(() => {
-  getFilesProduct(1)
+  // getFilesProduct(1)
 })
 </script>
 
