@@ -1,23 +1,17 @@
 import axios from 'axios'
 import { ref } from 'vue'
 import { useApi } from './useApi'
+import type { IProductBase } from '@/interfaces/Product'
 
 export interface IOptions {
   immediate?: boolean
-}
-
-export interface ISachet {
-  id: number
-  name: string
-  count: number
-  price: number
 }
 
 export function useFetchSachets(options: IOptions = {
   immediate: false,
 }) {
   const api = useApi()
-  const items = ref<ISachet[]>([])
+  const items = ref<IProductBase[]>([])
   const isLoading = ref(false)
   const errMessage = ref('')
 
@@ -27,7 +21,7 @@ export function useFetchSachets(options: IOptions = {
       if (!api.value) {
         return
       }
-      items.value = (await api.value.get<ISachet[]>('/sachets')).data
+      items.value = (await api.value.get<IProductBase[]>('/sachets')).data
     } catch (error) {
       if (axios.isAxiosError(error)) {
         errMessage.value = error.response?.data

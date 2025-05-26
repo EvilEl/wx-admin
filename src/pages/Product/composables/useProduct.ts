@@ -1,13 +1,8 @@
 import { ref } from 'vue'
-import type { keyGroupProduct } from '@/composables/useCreateProduct'
-
-export interface Product {
-  id: keyGroupProduct
-  text: string
-}
+import type { IProductSelect } from '@/interfaces/Product'
 
 export function useProduct() {
-  const products: Product[] = [
+  const products: IProductSelect[] = [
     { id: 'candles', text: 'Свечи' },
     { id: 'diffusers', text: 'Диффузоры' },
     { id: 'sachets', text: 'Саше' },

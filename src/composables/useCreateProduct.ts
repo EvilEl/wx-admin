@@ -1,23 +1,8 @@
+import { groupProduct } from '@/interfaces/Product'
 import axios from 'axios'
 import { ref } from 'vue'
 import { useApi } from './useApi'
-
-const groupProduct = Object.freeze({
-  candles: 'candles',
-  diffusers: 'diffusers',
-  sachets: 'sachets',
-})
-
-export interface IProduct {
-  name: string
-  count: number
-  price: number
-}
-export type keyGroupProduct = keyof typeof groupProduct
-
-export interface ICreateProduct extends IProduct {
-  group: keyGroupProduct
-}
+import type { ICreateProduct, IProduct } from '@/interfaces/Product'
 
 export function useCreateProduct() {
   const api = useApi()
