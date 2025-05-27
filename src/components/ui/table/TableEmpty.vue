@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { cn } from '@/lib/utils'
+import type { HTMLAttributes } from 'vue'
 import { reactiveOmit } from '@vueuse/core'
+import { cn } from '@/lib/utils'
 import TableCell from './TableCell.vue'
 import TableRow from './TableRow.vue'
-import type { HTMLAttributes } from 'vue'
 
 const props = withDefaults(defineProps<{
   class?: HTMLAttributes['class']

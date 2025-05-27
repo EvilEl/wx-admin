@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Table from '@/components/Table.vue'
 import {
   Select,
   SelectContent,
@@ -59,5 +60,6 @@ watch(selectedProduct, async value => {
     <div v-else>
       {{ items }}
     </div>
+    <Table />
   </div>
 </template>
