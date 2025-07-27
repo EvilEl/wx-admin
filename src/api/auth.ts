@@ -1,3 +1,4 @@
+import { extend } from 'zod/v4-mini'
 import { useAuthApi } from '@/composables/useAuthApi'
 
 interface LoginCredentials {
@@ -8,8 +9,11 @@ interface LoginCredentials {
 export interface User {
   id: string
   login: string
-  token: string
+  accessToken: string
+  refreshToken: string
 }
+
+export interface RefreshData extends Pick<User, 'login' | 'refreshToken'> {}
 
 export function authApi() {
   const api = useAuthApi()
@@ -22,7 +26,16 @@ export function authApi() {
     return response.data
   }
 
+  async function refresh(data: RefreshData) {
+    if (!api.value) {
+      return
+    }
+    const response = await api.value.post('refresh', data)
+    return response.data
+  }
+
   return {
     authenticate,
+    refresh,
   }
 }

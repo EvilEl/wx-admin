@@ -1,15 +1,16 @@
-import { authApi } from '@/api/auth'
 import { createGlobalState, StorageSerializers, useStorage } from '@vueuse/core'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import type { User } from '@/api/auth'
+import { authApi } from '@/api/auth'
+import type { RefreshData, User } from '@/api/auth'
 
 export const useUser = createGlobalState(() => {
-  const user = useStorage<User | null>('user', null, undefined, {
+  const user = useStorage<User | null>('user', null, localStorage, {
+    mergeDefaults: true,
     serializer: StorageSerializers.object,
   })
   const router = useRouter()
-  const { authenticate } = authApi()
+  const { authenticate, refresh } = authApi()
   const isLoading = ref(false)
   const error = ref<string | null>(null)
 
@@ -28,6 +29,10 @@ export const useUser = createGlobalState(() => {
     }
   }
 
+  const refreshToken = async (data: RefreshData) => {
+    return await refresh(data)
+  }
+
   const logout = () => {
     user.value = null
     router.push({ name: 'login' })
@@ -39,5 +44,6 @@ export const useUser = createGlobalState(() => {
     error,
     login,
     logout,
+    refreshToken,
   }
 })
