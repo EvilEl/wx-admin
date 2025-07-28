@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed, ref, watch } from 'vue'
 import Table from '@/components/Table.vue'
 import {
   Select,
@@ -13,9 +14,8 @@ import { useFetchCandles } from '@/composables/useFetchCandles'
 import { useFetchDiffusers } from '@/composables/useFetchDiffusers'
 import { useFetchSachets } from '@/composables/useFetchSachets'
 import { groupProduct } from '@/interfaces/Product'
-import { computed, ref, watch } from 'vue'
-import { useProduct } from '../Product/composables/useProduct'
 import type { IProductBase } from '@/interfaces/Product'
+import { useProduct } from '../Product/composables/useProduct'
 
 const { items: itemsSachets, getSachets, isLoading: isLoadingSachets } = useFetchSachets()
 const { items: itemsCandles, getCandles, isLoading: isLoadingCandles } = useFetchCandles()
@@ -58,8 +58,7 @@ watch(selectedProduct, async value => {
       isLoading...
     </div>
     <div v-else>
-      {{ items }}
+      <Table :items="items" />
     </div>
-    <Table />
   </div>
 </template>

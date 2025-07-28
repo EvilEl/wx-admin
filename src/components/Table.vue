@@ -1,24 +1,4 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Input } from '@/components/ui/input'
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import { valueUpdater } from '@/components/ui/table/utils'
-import { cn } from '@/lib/utils'
 import {
   createColumnHelper,
   FlexRender,
@@ -29,9 +9,25 @@ import {
   getSortedRowModel,
   useVueTable,
 } from '@tanstack/vue-table'
-import { ChevronDown, ChevronsUpDown } from 'lucide-vue-next'
-import { h, ref } from 'vue'
-import DropdownAction from './DropdownAction.vue'
+import { ChevronDown } from 'lucide-vue-next'
+import { computed, h, ref } from 'vue'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import { valueUpdater } from '@/components/ui/table/utils'
+import { cn } from '@/lib/utils'
 import type {
   ColumnFiltersState,
   ExpandedState,
@@ -39,104 +35,30 @@ import type {
   VisibilityState,
 } from '@tanstack/vue-table'
 
-export interface Payment {
-  id: string
-  amount: number
-  status: 'pending' | 'processing' | 'success' | 'failed'
-  email: string
+export interface Product {
+  count: number
+  id: number
+  price: number
+  name: string
 }
 
-const data: Payment[] = [
-  {
-    id: 'm5gr84i9',
-    amount: 316,
-    status: 'success',
-    email: 'ken99@yahoo.com',
-  },
-  {
-    id: '3u1reuv4',
-    amount: 242,
-    status: 'success',
-    email: 'Abe45@gmail.com',
-  },
-  {
-    id: 'derv1ws0',
-    amount: 837,
-    status: 'processing',
-    email: 'Monserrat44@gmail.com',
-  },
-  {
-    id: '5kma53ae',
-    amount: 874,
-    status: 'success',
-    email: 'Silas22@gmail.com',
-  },
-  {
-    id: 'bhqecj4p',
-    amount: 721,
-    status: 'failed',
-    email: 'carmella@hotmail.com',
-  },
-]
+const props = defineProps<{ items: Product[] }>()
 
-const columnHelper = createColumnHelper<Payment>()
+const columnHelper = createColumnHelper<Product>()
 
 const columns = [
-  columnHelper.display({
-    id: 'select',
-    header: ({ table }) => h(Checkbox, {
-      'modelValue': table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate'),
-      'onUpdate:modelValue': value => table.toggleAllPageRowsSelected(!!value),
-      'ariaLabel': 'Select all',
-    }),
-    cell: ({ row }) => {
-      return h(Checkbox, {
-        'modelValue': row.getIsSelected(),
-        'onUpdate:modelValue': value => row.toggleSelected(!!value),
-        'ariaLabel': 'Select row',
-      })
-    },
-    enableSorting: false,
-    enableHiding: false,
-  }),
-  columnHelper.accessor('status', {
+  columnHelper.accessor('id', {
     enablePinning: true,
-    header: 'Status',
-    cell: ({ row }) => h('div', { class: 'capitalize' }, row.getValue('status')),
+    header: 'Ид',
   }),
-  columnHelper.accessor('email', {
-    header: ({ column }) => {
-      return h(Button, {
-        variant: 'ghost',
-        onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
-      }, () => ['Email', h(ChevronsUpDown, { class: 'ml-2 h-4 w-4' })])
-    },
-    cell: ({ row }) => h('div', { class: 'lowercase' }, row.getValue('email')),
+  columnHelper.accessor('name', {
+    header: 'Название',
   }),
-  columnHelper.accessor('amount', {
-    header: () => h('div', { class: 'text-right' }, 'Amount'),
-    cell: ({ row }) => {
-      const amount = Number.parseFloat(row.getValue('amount'))
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }).format(amount)
-
-      return h('div', { class: 'text-right font-medium' }, formatted)
-    },
+  columnHelper.accessor('price', {
+    header: 'Цена',
   }),
-  columnHelper.display({
-    id: 'actions',
-    enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original
-      return h('div', { class: 'relative' }, h(DropdownAction, {
-        payment,
-        onExpand: row.toggleExpanded,
-      }))
-    },
+  columnHelper.accessor('count', {
+    header: 'Количество',
   }),
 ]
 
@@ -146,8 +68,8 @@ const columnVisibility = ref<VisibilityState>({})
 const rowSelection = ref({})
 const expanded = ref<ExpandedState>({})
 
-const table = useVueTable({
-  data,
+const table = computed(() => useVueTable({
+  data: props.items,
   columns,
   getCoreRowModel: getCoreRowModel(),
   getPaginationRowModel: getPaginationRowModel(),
@@ -176,21 +98,15 @@ const table = useVueTable({
       return expanded.value
     },
     columnPinning: {
-      left: ['status'],
+      left: ['id'],
     },
   },
-})
+}))
 </script>
 
 <template>
   <div class="w-full">
     <div class="flex gap-2 items-center py-4">
-      <Input
-        class="max-w-sm"
-        placeholder="Filter emails..."
-        :model-value="table.getColumn('email')?.getFilterValue() as string"
-        @update:model-value=" table.getColumn('email')?.setFilterValue($event)"
-      />
       <DropdownMenu>
         <DropdownMenuTrigger as-child>
           <Button variant="outline" class="ml-auto">
@@ -222,6 +138,10 @@ const table = useVueTable({
                 { 'sticky bg-background/95': header.column.getIsPinned() },
                 header.column.getIsPinned() === 'left' ? 'left-0' : 'right-0',
               )"
+              :style="{
+                maxWidth: header.column.columnDef.maxSize ? `${header.column.columnDef.maxSize}px` : undefined,
+                width: header.column.columnDef.size ? `${header.column.columnDef.size}px` : undefined,
+              }"
             >
               <FlexRender v-if="!header.isPlaceholder" :render="header.column.columnDef.header" :props="header.getContext()" />
             </TableHead>
@@ -237,6 +157,10 @@ const table = useVueTable({
                     { 'sticky bg-background/95': cell.column.getIsPinned() },
                     cell.column.getIsPinned() === 'left' ? 'left-0' : 'right-0',
                   )"
+                  :style="{
+                    maxWidth: cell.column.columnDef.maxSize ? `${cell.column.columnDef.maxSize}px` : undefined,
+                    width: cell.column.columnDef.size ? `${cell.column.columnDef.size}px` : undefined,
+                  }"
                 >
                   <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
                 </TableCell>
