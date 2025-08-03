@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { watch } from 'vue'
 import Table from '@/components/Table.vue'
 import {
   Select,
@@ -10,33 +10,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useFetchCandles } from '@/composables/useFetchCandles'
-import { useFetchDiffusers } from '@/composables/useFetchDiffusers'
-import { useFetchSachets } from '@/composables/useFetchSachets'
-import { groupProduct } from '@/interfaces/Product'
-import type { IProductBase } from '@/interfaces/Product'
+import { useFetchProduct } from '@/composables/useFetchProduct'
 import { useProduct } from '../Product/composables/useProduct'
 
-const { items: itemsSachets, getSachets, isLoading: isLoadingSachets } = useFetchSachets()
-const { items: itemsCandles, getCandles, isLoading: isLoadingCandles } = useFetchCandles()
-const { items: itemsDiffusers, getDiffusers, isLoading: isLoadingDiffusers } = useFetchDiffusers()
+const { items, getProducts, isLoading } = useFetchProduct()
 const { products, selectedProduct } = useProduct()
-const items = ref<IProductBase[]>([])
 
-const isLoading = computed(() => isLoadingSachets.value || isLoadingCandles.value || isLoadingDiffusers.value)
-
-watch(selectedProduct, async value => {
-  if (value === groupProduct.candles) {
-    await getCandles()
-    items.value = itemsCandles.value
-  } else if (value === groupProduct.diffusers) {
-    await getDiffusers()
-    items.value = itemsDiffusers.value
-  } else if (value === groupProduct.sachets) {
-    await getSachets()
-    items.value = itemsSachets.value
-  }
-})
+watch(selectedProduct, getProducts)
 </script>
 
 <template>

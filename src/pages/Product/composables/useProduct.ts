@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import type { IProductSelect } from '@/interfaces/Product'
+import type { IProductSelect, ProductType } from '@/interfaces/Product'
 
 export function useProduct() {
   const products: IProductSelect[] = [
@@ -8,7 +8,7 @@ export function useProduct() {
     { id: 'sachet', text: 'Саш' },
   ]
 
-  const selectedProduct = ref('')
+  const selectedProduct = ref<ProductType | string>('')
 
   return {
     products,
