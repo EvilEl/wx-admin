@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
-import { onMounted } from 'vue'
 import * as z from 'zod'
 import { Button } from '@/components/ui/button'
 import {
@@ -35,7 +34,7 @@ const formSchema = toTypedSchema(z.object({
 
 const { createProduct, errMessage } = useCreateProduct()
 const { products, selectedProduct } = useProduct()
-const { images, sendFile, getFilesProduct, onChangeFiles } = useProductFiles()
+const { images, onChangeFiles } = useProductFiles()
 
 const form = useForm({
   validationSchema: formSchema,
@@ -43,10 +42,6 @@ const form = useForm({
 
 const onSubmit = form.handleSubmit((values) => {
   createProduct((values as ICreateProduct))
-})
-
-onMounted(() => {
-  // getFilesProduct(1)
 })
 </script>
 

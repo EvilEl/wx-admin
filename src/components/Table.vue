@@ -27,6 +27,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { valueUpdater } from '@/components/ui/table/utils'
+import type { IProductBase } from '@/interfaces/Product'
 import { cn } from '@/lib/utils'
 import type {
   ColumnFiltersState,
@@ -35,16 +36,9 @@ import type {
   VisibilityState,
 } from '@tanstack/vue-table'
 
-export interface Product {
-  count: number
-  id: number
-  price: number
-  name: string
-}
+const props = defineProps<{ items: IProductBase[] }>()
 
-const props = defineProps<{ items: Product[] }>()
-
-const columnHelper = createColumnHelper<Product>()
+const columnHelper = createColumnHelper<IProductBase>()
 
 const columns = [
   columnHelper.accessor('id', {
@@ -59,6 +53,19 @@ const columns = [
   }),
   columnHelper.accessor('count', {
     header: 'Количество',
+  }),
+  columnHelper.accessor('files', {
+    header: 'Файлы',
+    cell: (props) => {
+      const files = props.getValue()
+      return h('div', { class: 'flex gap-1 overflow-x-auto' }, files?.map((file, index) =>
+        h('img', {
+          key: index,
+          src: file.base64,
+          class: 'w-12 h-12 object-cover rounded flex-shrink-0',
+        }),
+      ))
+    },
   }),
 ]
 

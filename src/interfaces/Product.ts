@@ -1,3 +1,5 @@
+import type { ProductFile } from '@/api/files'
+
 export const groupProduct = Object.freeze({
   candle: 'candle',
   diffuser: 'diffuser',
@@ -11,6 +13,7 @@ export interface IProductBase {
   count: number
   price: number
   type: ProductType
+  files: ProductFile[]
 }
 
 export interface IProduct extends Omit<IProductBase, 'id'> { }

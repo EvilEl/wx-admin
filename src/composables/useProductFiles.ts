@@ -1,9 +1,10 @@
+import { createGlobalState } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { filesApi } from '@/api/files'
 import type { ProductFile } from '@/api/files'
 import { toBase64 } from '@/lib/utils'
 
-export function useProductFiles() {
+export const useProductFiles = createGlobalState(() => {
   const api = filesApi()
 
   const files = ref<ProductFile[]>([])
@@ -16,6 +17,7 @@ export function useProductFiles() {
   }
 
   async function sendFile(id: number) {
+    console.log('selectedFiles.value.length', selectedFiles.value.length)
     if (!selectedFiles.value.length) {
       return
     }
@@ -59,4 +61,4 @@ export function useProductFiles() {
     getFilesProduct,
     onChangeFiles,
   }
-}
+})

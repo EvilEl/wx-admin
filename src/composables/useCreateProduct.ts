@@ -8,7 +8,7 @@ export function useCreateProduct() {
   const api = useApi()
   const errMessage = ref('')
   const isLoading = ref(false)
-  const { sendFile, selectedFiles, onChangeFiles } = useProductFiles()
+  const { sendFile, onChangeFiles } = useProductFiles()
 
   async function createProduct(product: ICreateProduct) {
     try {
@@ -21,7 +21,7 @@ export function useCreateProduct() {
         type: product.type,
       }
       const res = await api.value?.post<{ id: number }>('/products', data)
-      if (res && selectedFiles.value.length) {
+      if (res) {
         sendFile(res.data.id)
       }
     } catch (error) {
