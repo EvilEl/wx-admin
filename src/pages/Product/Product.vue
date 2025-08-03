@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { toTypedSchema } from '@vee-validate/zod'
+import { useForm } from 'vee-validate'
+import { onMounted } from 'vue'
+import * as z from 'zod'
 import { Button } from '@/components/ui/button'
 import {
   FormControl,
@@ -18,12 +22,9 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useCreateProduct } from '@/composables/useCreateProduct'
-import { toTypedSchema } from '@vee-validate/zod'
-import { useForm } from 'vee-validate'
-import { onMounted } from 'vue'
-import * as z from 'zod'
+import { useProductFiles } from '@/composables/useProductFiles'
+import type { ICreateProduct } from '@/interfaces/Product'
 import { useProduct } from './composables/useProduct'
-import type { ICreateProduct } from '@/composables/useCreateProduct'
 
 const formSchema = toTypedSchema(z.object({
   group: z.string({ message: 'Требуется выбрать продукт' }),
@@ -32,7 +33,7 @@ const formSchema = toTypedSchema(z.object({
   count: z.number({ message: 'Заполните поле' }).min(1, { message: 'Минимальное значение 1' }).max(100000, { message: 'Максимальное значение 100000' }).default(1),
 }))
 
-const { createProduct, errMessage } = useCreateProduct()
+const { createProduct, errMessage, onChangeFiles } = useCreateProduct()
 const { products, selectedProduct } = useProduct()
 // const { images, sendFile, getFilesProduct, onChangeFiles } = useProductFiles()
 
@@ -101,23 +102,22 @@ onMounted(() => {
           <FormMessage />
         </FormItem>
       </FormField>
+      <div class="grid w-full max-w-sm items-center gap-1.5">
+        <Label for="picture">Picture</Label>
+        <Input id="picture" multiple type="file" accept="image/*" @change="onChangeFiles" />
+      </div>
+      <div v-for="img of images" :key="img">
+        <img class="w-20 h-20" :src="img" alt="">
+      </div>
+
+      <!-- <Button @click="sendFile">
+        загрузить файлы
+      </Button> -->
       <Button class="col-span-2" type="submit">
         Создать
       </Button>
       {{ errMessage }}
     </form>
-
-    <!-- <div class="grid w-full max-w-sm items-center gap-1.5">
-      <Label for="picture">Picture</Label>
-      <Input id="picture" multiple type="file" accept="image/*" @change="onChangeFiles" />
-    </div>
-    <div v-for="img of images" :key="img">
-      <img class="w-20 h-20" :src="img" alt="">
-    </div>
-
-    <Button @click="sendFile">
-      загрузить файлы
-    </Button> -->
   </div>
 </template>
 

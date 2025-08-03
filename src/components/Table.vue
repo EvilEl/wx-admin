@@ -107,6 +107,7 @@ const table = computed(() => useVueTable({
 <template>
   <div class="w-full">
     <div class="flex gap-2 items-center py-4">
+      <!-- <img src="http://localhost:3000/uploads/products/Vue.png"> -->
       <DropdownMenu>
         <DropdownMenuTrigger as-child>
           <Button variant="outline" class="ml-auto">

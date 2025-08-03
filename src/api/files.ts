@@ -8,7 +8,6 @@ export interface ProductFile {
   size: number
   link: string
   base64: string
-
 }
 
 export function filesApi() {

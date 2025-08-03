@@ -1,7 +1,7 @@
-import { filesApi } from '@/api/files'
-import { toBase64 } from '@/lib/utils'
 import { computed, ref } from 'vue'
+import { filesApi } from '@/api/files'
 import type { ProductFile } from '@/api/files'
+import { toBase64 } from '@/lib/utils'
 
 export function useProductFiles() {
   const api = filesApi()
@@ -19,13 +19,12 @@ export function useProductFiles() {
     if (!selectedFiles.value.length) {
       return
     }
-
     const tasks = selectedFiles.value.map(async (file) => {
       try {
         const base64 = await toBase64(file)
         const data = {
           filename: file.name,
-          idProduct: 1,
+          idProduct: 1, // TODO нужно прокинуть id product
           originalname: file.name,
           mimeType: file.type,
           size: file.size,
@@ -48,6 +47,7 @@ export function useProductFiles() {
     if (!files) {
       return
     }
+    console.log('files', files)
     selectedFiles.value = [...files]
   }
 
