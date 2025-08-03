@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { ref } from 'vue'
-import { useApi } from './useApi'
 import type { IProductBase } from '@/interfaces/Product'
+import { useApi } from './useApi'
 
 export interface IOptions {
   immediate?: boolean

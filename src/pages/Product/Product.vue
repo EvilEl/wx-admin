@@ -27,15 +27,15 @@ import type { ICreateProduct } from '@/interfaces/Product'
 import { useProduct } from './composables/useProduct'
 
 const formSchema = toTypedSchema(z.object({
-  group: z.string({ message: 'Требуется выбрать продукт' }),
+  type: z.string({ message: 'Требуется выбрать продукт' }),
   name: z.string({ message: 'Заполните поле' }),
   price: z.number({ message: 'Заполните поле' }).min(1, { message: 'Минимальное значение 1' }).max(10000000, { message: 'Максимальное значение 10000000' }).default(1),
   count: z.number({ message: 'Заполните поле' }).min(1, { message: 'Минимальное значение 1' }).max(100000, { message: 'Максимальное значение 100000' }).default(1),
 }))
 
-const { createProduct, errMessage, onChangeFiles } = useCreateProduct()
+const { createProduct, errMessage } = useCreateProduct()
 const { products, selectedProduct } = useProduct()
-// const { images, sendFile, getFilesProduct, onChangeFiles } = useProductFiles()
+const { images, sendFile, getFilesProduct, onChangeFiles } = useProductFiles()
 
 const form = useForm({
   validationSchema: formSchema,
@@ -53,7 +53,7 @@ onMounted(() => {
 <template>
   <div class="p-10">
     <form class="group" @submit="onSubmit">
-      <FormField v-slot="{ componentField }" name="group">
+      <FormField v-slot="{ componentField }" name="type">
         <FormItem>
           <FormLabel>Продукт</FormLabel>
           <FormControl>
@@ -109,10 +109,6 @@ onMounted(() => {
       <div v-for="img of images" :key="img">
         <img class="w-20 h-20" :src="img" alt="">
       </div>
-
-      <!-- <Button @click="sendFile">
-        загрузить файлы
-      </Button> -->
       <Button class="col-span-2" type="submit">
         Создать
       </Button>

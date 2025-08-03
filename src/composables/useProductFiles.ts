@@ -15,7 +15,7 @@ export function useProductFiles() {
     files.value = await api.getFilesProduct(id)
   }
 
-  async function sendFile() {
+  async function sendFile(id: number) {
     if (!selectedFiles.value.length) {
       return
     }
@@ -24,7 +24,7 @@ export function useProductFiles() {
         const base64 = await toBase64(file)
         const data = {
           filename: file.name,
-          idProduct: 1, // TODO нужно прокинуть id product
+          idProduct: id,
           originalname: file.name,
           mimeType: file.type,
           size: file.size,

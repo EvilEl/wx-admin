@@ -3,9 +3,9 @@ import type { IProductSelect } from '@/interfaces/Product'
 
 export function useProduct() {
   const products: IProductSelect[] = [
-    { id: 'candles', text: 'Свечи' },
-    { id: 'diffusers', text: 'Диффузоры' },
-    { id: 'sachets', text: 'Саше' },
+    { id: 'candle', text: 'Свеча' },
+    { id: 'diffuser', text: 'Диффузор' },
+    { id: 'sachet', text: 'Саш' },
   ]
 
   const selectedProduct = ref('')
