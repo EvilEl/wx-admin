@@ -1,7 +1,7 @@
 import { createGlobalState } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { filesApi } from '@/api/files'
-import type { ProductFile } from '@/api/files'
+import type { ProductFile, RemoveFileFromProduct } from '@/api/files'
 import { toBase64 } from '@/lib/utils'
 
 export const useProductFiles = createGlobalState(() => {
@@ -17,7 +17,6 @@ export const useProductFiles = createGlobalState(() => {
   }
 
   async function sendFile(id: number) {
-    console.log('selectedFiles.value.length', selectedFiles.value.length)
     if (!selectedFiles.value.length) {
       return
     }
@@ -53,6 +52,14 @@ export const useProductFiles = createGlobalState(() => {
     selectedFiles.value = [...files]
   }
 
+  async function onRemoveFileFromProduct(data: RemoveFileFromProduct) {
+    try {
+      await api.removeFileFromProduct(data)
+    } catch (error) {
+      console.error('Ошибка удаления файла:', error)
+    }
+  }
+
   return {
     files,
     images,
@@ -60,5 +67,6 @@ export const useProductFiles = createGlobalState(() => {
     sendFile,
     getFilesProduct,
     onChangeFiles,
+    onRemoveFileFromProduct,
   }
 })

@@ -11,6 +11,7 @@ import {
 } from '@tanstack/vue-table'
 import { ChevronDown } from 'lucide-vue-next'
 import { computed, h, ref } from 'vue'
+import { toast } from 'vue-sonner'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -18,6 +19,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+
 import {
   Table,
   TableBody,
@@ -27,6 +29,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { valueUpdater } from '@/components/ui/table/utils'
+import { useProductFiles } from '@/composables/useProductFiles'
 import type { IProductBase } from '@/interfaces/Product'
 import { cn } from '@/lib/utils'
 import type {
@@ -37,6 +40,11 @@ import type {
 } from '@tanstack/vue-table'
 
 const props = defineProps<{ items: IProductBase[] }>()
+const emit = defineEmits<{
+  'file-removed': []
+}>()
+
+const { onRemoveFileFromProduct } = useProductFiles()
 
 const columnHelper = createColumnHelper<IProductBase>()
 
@@ -58,12 +66,38 @@ const columns = [
     header: 'Файлы',
     cell: (props) => {
       const files = props.getValue()
+      const handleRemoveFile = async (fileIndex: number) => {
+        const file = files[fileIndex]
+        if (file) {
+          try {
+            await onRemoveFileFromProduct({
+              idFile: file.id,
+              idProduct: file.idProduct,
+            })
+            files.splice(fileIndex, 1)
+            console.log('toast.success', toast.success)
+            toast.success('Файл успешно удален')
+            emit('file-removed')
+          } catch {
+            toast.error('Ошибка при удалении файла')
+          }
+        }
+      }
+
       return h('div', { class: 'flex gap-1 overflow-x-auto' }, files?.map((file, index) =>
-        h('img', {
+        h('div', {
           key: index,
-          src: file.base64,
-          class: 'w-12 h-12 object-cover rounded flex-shrink-0',
-        }),
+          class: 'relative group',
+        }, [
+          h('img', {
+            src: file.base64,
+            class: 'w-12 h-12 object-cover rounded flex-shrink-0',
+          }),
+          h('button', {
+            onClick: () => handleRemoveFile(index),
+            class: 'absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 text-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center',
+          }, '×'),
+        ]),
       ))
     },
   }),
