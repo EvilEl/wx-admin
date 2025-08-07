@@ -10,11 +10,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { useApiProduct } from '@/composables/useApiProduct'
 import { useFetchProduct } from '@/composables/useFetchProduct'
+import type { IProductBase } from '@/interfaces/Product'
 import { useProduct } from '../Product/composables/useProduct'
 
 const { items, getProducts, isLoading } = useFetchProduct()
 const { products, selectedProduct } = useProduct()
+const { updateProduct } = useApiProduct()
+
+async function handleUpdateItem(item: IProductBase) {
+  const itemIndex = items.value.findIndex(i => i.id === item.id)
+  if (itemIndex !== -1) {
+    items.value[itemIndex] = { ...items.value[itemIndex], ...item }
+  }
+  items.value = [...items.value]
+  await updateProduct(item.id, {
+    name: item.name,
+    price: item.price,
+    count: item.count,
+  })
+}
 
 watch(selectedProduct, getProducts)
 </script>
@@ -38,7 +54,7 @@ watch(selectedProduct, getProducts)
       isLoading...
     </div>
     <div v-else>
-      <Table :items="items" />
+      <Table :items="items" @update:item="handleUpdateItem" />
     </div>
   </div>
 </template>

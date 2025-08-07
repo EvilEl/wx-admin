@@ -12,14 +12,15 @@ import {
 import { ChevronDown } from 'lucide-vue-next'
 import { computed, h, ref } from 'vue'
 import { toast } from 'vue-sonner'
+import EditableCell from '@/components/EditableCell.vue'
 import { Button } from '@/components/ui/button'
+
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-
 import {
   Table,
   TableBody,
@@ -42,6 +43,7 @@ import type {
 const props = defineProps<{ items: IProductBase[] }>()
 const emit = defineEmits<{
   'file-removed': []
+  'update:item': [item: IProductBase]
 }>()
 
 const { onRemoveFileFromProduct } = useProductFiles()
@@ -55,12 +57,41 @@ const columns = [
   }),
   columnHelper.accessor('name', {
     header: 'Название',
+    cell: (info) => {
+      return h(EditableCell, {
+        value: info.getValue(),
+        onUpdate: (newValue) => {
+          const updatedItem = { ...info.row.original, name: newValue as string }
+          emit('update:item', updatedItem)
+        },
+      })
+    },
   }),
   columnHelper.accessor('price', {
     header: 'Цена',
+    cell: (info) => {
+      return h(EditableCell, {
+        value: info.getValue(),
+        type: 'number',
+        onUpdate: (newValue) => {
+          const updatedItem = { ...info.row.original, price: newValue as number }
+          emit('update:item', updatedItem)
+        },
+      })
+    },
   }),
   columnHelper.accessor('count', {
     header: 'Количество',
+    cell: (info) => {
+      return h(EditableCell, {
+        value: info.getValue(),
+        type: 'number',
+        onUpdate: (newValue) => {
+          const updatedItem = { ...info.row.original, count: newValue as number }
+          emit('update:item', updatedItem)
+        },
+      })
+    },
   }),
   columnHelper.accessor('files', {
     header: 'Файлы',
@@ -95,7 +126,7 @@ const columns = [
           }),
           h('button', {
             onClick: () => handleRemoveFile(index),
-            class: 'absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 text-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center',
+            class: 'absolute top-[0px] -right-1 bg-red-500 text-white rounded-full w-[15px] h-[15px] text-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center',
           }, '×'),
         ]),
       ))
@@ -109,40 +140,43 @@ const columnVisibility = ref<VisibilityState>({})
 const rowSelection = ref({})
 const expanded = ref<ExpandedState>({})
 
-const table = computed(() => useVueTable({
-  data: props.items,
-  columns,
-  getCoreRowModel: getCoreRowModel(),
-  getPaginationRowModel: getPaginationRowModel(),
-  getSortedRowModel: getSortedRowModel(),
-  getFilteredRowModel: getFilteredRowModel(),
-  getExpandedRowModel: getExpandedRowModel(),
-  onSortingChange: updaterOrValue => valueUpdater(updaterOrValue, sorting),
-  onColumnFiltersChange: updaterOrValue => valueUpdater(updaterOrValue, columnFilters),
-  onColumnVisibilityChange: updaterOrValue => valueUpdater(updaterOrValue, columnVisibility),
-  onRowSelectionChange: updaterOrValue => valueUpdater(updaterOrValue, rowSelection),
-  onExpandedChange: updaterOrValue => valueUpdater(updaterOrValue, expanded),
-  state: {
-    get sorting() {
-      return sorting.value
+const table = computed(() => {
+  console.log('props.items', props.items)
+  return useVueTable({
+    data: props.items,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+    onSortingChange: updaterOrValue => valueUpdater(updaterOrValue, sorting),
+    onColumnFiltersChange: updaterOrValue => valueUpdater(updaterOrValue, columnFilters),
+    onColumnVisibilityChange: updaterOrValue => valueUpdater(updaterOrValue, columnVisibility),
+    onRowSelectionChange: updaterOrValue => valueUpdater(updaterOrValue, rowSelection),
+    onExpandedChange: updaterOrValue => valueUpdater(updaterOrValue, expanded),
+    state: {
+      get sorting() {
+        return sorting.value
+      },
+      get columnFilters() {
+        return columnFilters.value
+      },
+      get columnVisibility() {
+        return columnVisibility.value
+      },
+      get rowSelection() {
+        return rowSelection.value
+      },
+      get expanded() {
+        return expanded.value
+      },
+      columnPinning: {
+        left: ['id'],
+      },
     },
-    get columnFilters() {
-      return columnFilters.value
-    },
-    get columnVisibility() {
-      return columnVisibility.value
-    },
-    get rowSelection() {
-      return rowSelection.value
-    },
-    get expanded() {
-      return expanded.value
-    },
-    columnPinning: {
-      left: ['id'],
-    },
-  },
-}))
+  })
+})
 </script>
 
 <template>

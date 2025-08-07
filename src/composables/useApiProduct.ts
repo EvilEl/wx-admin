@@ -1,10 +1,10 @@
 import axios from 'axios'
 import { ref } from 'vue'
 import { useProductFiles } from '@/composables/useProductFiles'
-import type { ICreateProduct } from '@/interfaces/Product'
+import type { ICreateProduct, IProduct } from '@/interfaces/Product'
 import { useApi } from './useApi'
 
-export function useCreateProduct() {
+export function useApiProduct() {
   const api = useApi()
   const errMessage = ref('')
   const isLoading = ref(false)
@@ -34,6 +34,31 @@ export function useCreateProduct() {
     }
   }
 
+  async function updateProduct(id: number, data: Partial<IProduct>) {
+    try {
+      clear()
+      const formData = new FormData()
+      if (data.count) {
+        formData.append('count', String(data.count))
+      }
+      if (data.name) {
+        formData.append('name', String(data.name))
+      }
+      if (data.price) {
+        formData.append('price', String(data.price))
+      }
+      await api.value?.put<{ id: number }>(`/products/${id}`, data)
+      isLoading.value = true
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        errMessage.value = error.response?.data
+      }
+      console.log(error)
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   function clear() {
     errMessage.value = ''
   }
@@ -41,6 +66,7 @@ export function useCreateProduct() {
   return {
     onChangeFiles,
     createProduct,
+    updateProduct,
     errMessage,
   }
 }

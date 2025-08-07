@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useCreateProduct } from '@/composables/useCreateProduct'
+import { useApiProduct } from '@/composables/useApiProduct'
 import { useProductFiles } from '@/composables/useProductFiles'
 import type { ICreateProduct } from '@/interfaces/Product'
 import { useProduct } from './composables/useProduct'
@@ -32,7 +32,7 @@ const formSchema = toTypedSchema(z.object({
   count: z.number({ message: 'Заполните поле' }).min(1, { message: 'Минимальное значение 1' }).max(100000, { message: 'Максимальное значение 100000' }).default(1),
 }))
 
-const { createProduct, errMessage } = useCreateProduct()
+const { createProduct, errMessage } = useApiProduct()
 const { products, selectedProduct } = useProduct()
 const { images, onChangeFiles } = useProductFiles()
 
@@ -98,7 +98,7 @@ const onSubmit = form.handleSubmit((values) => {
         </FormItem>
       </FormField>
       <div class="grid w-full max-w-sm items-center gap-1.5">
-        <Label for="picture">Picture</Label>
+        <label for="picture">Picture</label>
         <Input id="picture" multiple type="file" accept="image/*" @change="onChangeFiles" />
       </div>
       <div v-for="img of images" :key="img">

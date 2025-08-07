@@ -16,7 +16,7 @@ export interface IProductBase {
   files: ProductFile[]
 }
 
-export interface IProduct extends Omit<IProductBase, 'id'> { }
+export interface IProduct extends Omit<IProductBase, 'id'> {}
 
 export type keyGroupProduct = keyof typeof groupProduct
 
