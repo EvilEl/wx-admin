@@ -48,7 +48,7 @@ function handleKeydown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div class="group relative">
+  <div class="group relative" @click="startEdit">
     <div v-if="!isEditing" class="flex items-center justify-between">
       <span>{{ value }}</span>
       <Button
