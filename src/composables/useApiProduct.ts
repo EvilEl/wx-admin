@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { ref } from 'vue'
+import { toast } from 'vue-sonner'
 import { useProductFiles } from '@/composables/useProductFiles'
 import type { ICreateProduct, IProduct } from '@/interfaces/Product'
 import { useApi } from './useApi'
@@ -26,9 +27,13 @@ export function useApiProduct() {
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        errMessage.value = error.response?.data
+        errMessage.value = error.response?.data ?? error.message
+        console.log('Ошибка создания продукта', error)
+        toast.error(errMessage.value)
+      } else {
+        console.log('Ошибка создания продукта', error)
+        toast.error(error)
       }
-      console.log(error)
     } finally {
       isLoading.value = false
     }

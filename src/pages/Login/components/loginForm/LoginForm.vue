@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { toast } from 'vue-sonner'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useUser } from '@/composables/useUser'
-import { ref } from 'vue'
 
 const { login: loginUser, isLoading, error } = useUser()
 const login = ref('')
@@ -17,8 +18,10 @@ async function onSubmit() {
       login: login.value,
       password: password.value,
     })
+    toast.success('Успешно вошли в систему')
   } catch (error) {
     console.error('Login failed:', error)
+    toast.error(error)
   }
 }
 </script>

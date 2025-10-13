@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { cn } from '@/lib/utils'
 import { Primitive } from 'reka-ui'
+import { cn } from '@/lib/utils'
 import { sidebarMenuButtonVariants } from '.'
 import type { PrimitiveProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'

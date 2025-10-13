@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { cn } from '@/lib/utils'
 import { DialogOverlay } from 'reka-ui'
 import { computed } from 'vue'
+import { cn } from '@/lib/utils'
 import type { DialogOverlayProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
 

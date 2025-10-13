@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Box, Home, ScanLine } from 'lucide-vue-next'
+import { RouterLink } from 'vue-router'
 import { Button } from '@/components/ui/button'
 import {
   Sidebar,
@@ -10,8 +12,6 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 import { useUser } from '@/composables/useUser'
-import { Box, Home, ScanLine } from 'lucide-vue-next'
-import { RouterLink } from 'vue-router'
 
 const { logout } = useUser()
 

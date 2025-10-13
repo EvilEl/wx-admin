@@ -1,5 +1,6 @@
 import { createGlobalState } from '@vueuse/core'
 import { computed, ref } from 'vue'
+import { toast } from 'vue-sonner'
 import { filesApi } from '@/api/files'
 import type { ProductFile, RemoveFileFromProduct } from '@/api/files'
 import { toBase64 } from '@/lib/utils'
@@ -31,15 +32,16 @@ export const useProductFiles = createGlobalState(() => {
           size: file.size,
           link: '',
           base64,
-        }
+        } as ProductFile
         await api.createFile(data)
         files.value.push(data)
       } catch (error) {
         console.error('Ошибка обработки файла:', file.name, error)
+        toast.error(error)
       }
     })
-
     await Promise.all(tasks)
+
     selectedFiles.value = []
   }
 
@@ -55,8 +57,10 @@ export const useProductFiles = createGlobalState(() => {
   async function onRemoveFileFromProduct(data: RemoveFileFromProduct) {
     try {
       await api.removeFileFromProduct(data)
+      toast.success('Файл удален успешно')
     } catch (error) {
       console.error('Ошибка удаления файла:', error)
+      toast.error(error)
     }
   }
 

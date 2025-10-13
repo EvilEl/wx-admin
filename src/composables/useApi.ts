@@ -46,7 +46,7 @@ export function useApi() {
 
             originalRequest.headers.Authorization = `Bearer ${res.accessToken}`
             return instance(originalRequest)
-          } catch (_) {
+          } catch {
             logout()
           }
         }

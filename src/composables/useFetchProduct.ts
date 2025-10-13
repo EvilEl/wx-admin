@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { ref } from 'vue'
+import { toast } from 'vue-sonner'
 import type { IProductBase, ProductType } from '@/interfaces/Product'
 import { useApi } from './useApi'
 
@@ -22,9 +23,13 @@ export function useFetchProduct() {
       items.value = (await api.value.get<IProductBase[]>(`/products/type/${productType}`)).data
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        errMessage.value = error.response?.data
+        errMessage.value = error.response?.data ?? error.message
+        console.log(errMessage.value)
+        toast.error(errMessage.value)
+      } else {
+        console.log(error)
+        toast.error(error)
       }
-      console.log(error)
     } finally {
       isLoading.value = false
     }

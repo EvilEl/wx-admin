@@ -1,4 +1,3 @@
-import { extend } from 'zod/v4-mini'
 import { useAuthApi } from '@/composables/useAuthApi'
 
 interface LoginCredentials {

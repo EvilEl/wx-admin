@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { cn } from '@/lib/utils'
 import { reactiveOmit } from '@vueuse/core'
 import { ChevronRight } from 'lucide-vue-next'
 import {
@@ -7,6 +6,7 @@ import {
 
   useForwardProps,
 } from 'reka-ui'
+import { cn } from '@/lib/utils'
 import type { DropdownMenuSubTriggerProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
 
