@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Box, Home, ScanLine } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
+import ToggleTheme from '@/components/ToggleTheme.vue'
 import { Button } from '@/components/ui/button'
 import {
   Sidebar,
@@ -37,6 +38,7 @@ const items = [
 <template>
   <Sidebar>
     <SidebarContent>
+      <ToggleTheme />
       <SidebarGroup>
         <SidebarGroupContent>
           <SidebarMenu>
