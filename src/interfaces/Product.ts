@@ -28,3 +28,14 @@ export interface IProductSelect {
   id: keyGroupProduct
   text: string
 }
+
+export interface ICategory {
+  id: number
+  name: string
+  description: string
+}
+
+export interface ICreateCategory {
+  name: string
+  description: string
+}

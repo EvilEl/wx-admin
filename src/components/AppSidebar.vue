@@ -23,6 +23,11 @@ const items = [
     icon: Home,
   },
   {
+    title: 'Категории товаров',
+    name: 'categories',
+    icon: Box,
+  },
+  {
     title: 'Товары',
     name: 'products',
     icon: Box,

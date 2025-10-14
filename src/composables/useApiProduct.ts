@@ -42,6 +42,7 @@ export function useApiProduct() {
   async function updateProduct(id: number, data: Partial<IProduct>) {
     try {
       clear()
+      isLoading.value = true
       const formData = new FormData()
       if (data.count) {
         formData.append('count', String(data.count))
@@ -53,7 +54,6 @@ export function useApiProduct() {
         formData.append('price', String(data.price))
       }
       await api.value?.put<{ id: number }>(`/products/${id}`, data)
-      isLoading.value = true
     } catch (error) {
       if (axios.isAxiosError(error)) {
         errMessage.value = error.response?.data

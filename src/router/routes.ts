@@ -14,6 +14,11 @@ export const routes = [
         path: '/product',
         component: () => import('@/pages/Product/Product.vue'),
       },
+      {
+        name: 'categories',
+        path: '/categories',
+        component: () => import('@/pages/Categories/Categories.vue'),
+      },
     ],
   },
   {

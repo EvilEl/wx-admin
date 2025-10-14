@@ -73,7 +73,7 @@ function handleKeydown(event: KeyboardEvent) {
         variant="ghost"
         size="sm"
         class="h-6 w-6 p-0 text-green-600 hover:text-green-700"
-        @click="saveEdit"
+        @click.stop="saveEdit"
       >
         <Check class="h-3 w-3" />
       </Button>
@@ -81,7 +81,7 @@ function handleKeydown(event: KeyboardEvent) {
         variant="ghost"
         size="sm"
         class="h-6 w-6 p-0 text-red-600 hover:text-red-700"
-        @click="cancelEdit"
+        @click.stop="cancelEdit"
       >
         <X class="h-3 w-3" />
       </Button>
