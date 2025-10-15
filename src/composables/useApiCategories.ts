@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { ref, toValue } from 'vue'
 import { toast } from 'vue-sonner'
-import type { ICreateCategory } from '@/interfaces/Product'
+import type { ICategory, ICreateCategory } from '@/interfaces/Product'
 import { useApi } from './useApi'
 import type { MaybeRefOrGetter } from 'vue'
 
@@ -14,7 +14,7 @@ export function useApiCategories() {
     try {
       clear()
       const categoryData = toValue(value)
-      isLoading.value = true
+      // isLoading.value = true
       const data = {
         name: categoryData.name,
         description: categoryData.description,
@@ -31,7 +31,7 @@ export function useApiCategories() {
         toast.error(error)
       }
     } finally {
-      isLoading.value = false
+      // isLoading.value = false
     }
   }
 
@@ -58,16 +58,20 @@ export function useApiCategories() {
     }
   }
 
-  async function getAllCategories() {
+  async function getAllCategories(): Promise<ICategory[]> {
     try {
       clear()
       isLoading.value = true
-      return (await api.value?.get('/category')).data
+      if (!api.value) {
+        return []
+      }
+      return (await api.value.get<ICategory[]>('/category')).data ?? []
     } catch (error) {
       if (axios.isAxiosError(error)) {
         errMessage.value = error.response?.data
       }
       console.log(error)
+      return []
     } finally {
       isLoading.value = false
     }

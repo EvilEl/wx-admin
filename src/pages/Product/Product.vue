@@ -21,19 +21,19 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useApiProduct } from '@/composables/useApiProduct'
+import { useCategories } from '@/composables/useCategories'
 import { useProductFiles } from '@/composables/useProductFiles'
 import type { ICreateProduct } from '@/interfaces/Product'
-import { useProduct } from './composables/useProduct'
 
 const formSchema = toTypedSchema(z.object({
-  type: z.string({ message: 'Требуется выбрать продукт' }),
+  categoryId: z.string({ message: 'Требуется выбрать категорию продукта' }),
   name: z.string({ message: 'Заполните поле' }),
   price: z.number({ message: 'Заполните поле' }).min(1, { message: 'Минимальное значение 1' }).max(10000000, { message: 'Максимальное значение 10000000' }).default(1),
   count: z.number({ message: 'Заполните поле' }).min(1, { message: 'Минимальное значение 1' }).max(100000, { message: 'Максимальное значение 100000' }).default(1),
 }))
 
 const { createProduct, errMessage } = useApiProduct()
-const { products, selectedProduct } = useProduct()
+const { categories, selectedCategory: _selectedCategory } = useCategories()
 const { images, onChangeFiles } = useProductFiles()
 
 const form = useForm({
@@ -48,19 +48,24 @@ const onSubmit = form.handleSubmit((values) => {
 <template>
   <div class="p-10">
     <form class="group" @submit="onSubmit">
-      <FormField v-slot="{ componentField }" name="type">
+      <FormField v-slot="{ componentField }" name="categoryId">
         <FormItem>
           <FormLabel>Продукт</FormLabel>
           <FormControl>
-            <Select v-model="selectedProduct" v-bind="componentField">
+            <Select
+              :name="componentField.name"
+              :model-value="form.values.categoryId"
+              @update:model-value="componentField.onChange"
+              @blur="componentField.onBlur"
+            >
               <SelectTrigger class="w-full">
                 <SelectValue placeholder="Выберите продукт" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectLabel>Выберите продукт</SelectLabel>
-                  <SelectItem v-for="product of products" :key="product.id" :value="product.id">
-                    {{ product.text }}
+                  <SelectLabel>Выберите категорию продукта</SelectLabel>
+                  <SelectItem v-for="category of categories" :key="category.id" :value="String(category.id)">
+                    {{ category.name }}
                   </SelectItem>
                 </SelectGroup>
               </SelectContent>
@@ -104,7 +109,7 @@ const onSubmit = form.handleSubmit((values) => {
       <div v-for="img of images" :key="img">
         <img class="w-20 h-20" :src="img" alt="">
       </div>
-      <Button class="col-span-2" type="submit">
+      <Button variant="outline" class="col-span-2" type="submit">
         Создать
       </Button>
       {{ errMessage }}

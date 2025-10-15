@@ -56,7 +56,7 @@ const items = [
               </SidebarMenuButton>
             </SidebarMenuItem>
 
-            <Button @click="logout">
+            <Button variant="outline" @click="logout">
               Выйти
             </Button>
           </SidebarMenu>

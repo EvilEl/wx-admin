@@ -141,7 +141,6 @@ const rowSelection = ref({})
 const expanded = ref<ExpandedState>({})
 
 const table = computed(() => {
-  console.log('props.items', props.items)
   return useVueTable({
     data: props.items,
     columns,

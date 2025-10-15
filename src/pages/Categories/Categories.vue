@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
-import { onMounted, ref } from 'vue'
-import { toast } from 'vue-sonner'
 import * as z from 'zod'
 import CategoriesTable from '@/components/CategoriesTable.vue'
-import { Button } from '@/components/ui/button'
 
+import { Button } from '@/components/ui/button'
 import {
   FormControl,
   FormField,
@@ -16,16 +14,10 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
-import { useApiCategories } from '@/composables/useApiCategories'
+import { useCategories } from '@/composables/useCategories'
 import type { ICategory } from '@/interfaces/Product'
 
-const { createCategory, updateCategory, getAllCategories, errMessage } = useApiCategories()
-
-const categories = ref<ICategory[]>([])
-const isLoading = ref(false)
-onMounted(() => {
-  initCategories()
-})
+const { categories, isLoading, errMessage, updateCategory, createCategory, initCategories } = useCategories()
 
 const formSchema = toTypedSchema(z.object({
   name: z.string({ message: 'Заполните поле' }),
@@ -35,17 +27,6 @@ const formSchema = toTypedSchema(z.object({
 const form = useForm({
   validationSchema: formSchema,
 })
-
-async function initCategories() {
-  try {
-    isLoading.value = true
-    categories.value = await getAllCategories()
-  } catch (error) {
-    toast.error(error)
-  } finally {
-    isLoading.value = false
-  }
-}
 
 async function handleUpdateItem(item: ICategory) {
   const itemIndex = categories.value.findIndex(i => i.id === item.id)
@@ -63,9 +44,7 @@ async function handleUpdateItem(item: ICategory) {
 
 const onSubmit = form.handleSubmit(async (values) => {
   await createCategory(values)
-  // Обновляем список категорий после создания
   await initCategories()
-  // Сбрасываем форму
   form.resetForm()
 })
 </script>
@@ -107,8 +86,8 @@ const onSubmit = form.handleSubmit(async (values) => {
     </div>
 
     <div>
-      <Spinner v-if="isLoading" class="size-8 m-auto text-yellow-500" />
-      <CategoriesTable v-else :items="categories" @update:item="handleUpdateItem" />
+      <Spinner v-show="isLoading" class="size-8 m-auto text-yellow-500" />
+      <CategoriesTable v-show="!isLoading" :items="categories" @update:item="handleUpdateItem" />
     </div>
   </div>
 </template>

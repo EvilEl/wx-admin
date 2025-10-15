@@ -12,7 +12,7 @@ export interface IProductBase {
   name: string
   count: number
   price: number
-  type: ProductType
+  categoryId: string
   files: ProductFile[]
 }
 

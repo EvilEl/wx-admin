@@ -1,8 +1,9 @@
 import axios from 'axios'
-import { ref } from 'vue'
+import { ref, toValue } from 'vue'
 import { toast } from 'vue-sonner'
-import type { IProductBase, ProductType } from '@/interfaces/Product'
+import type { IProductBase } from '@/interfaces/Product'
 import { useApi } from './useApi'
+import type { MaybeRefOrGetter } from 'vue'
 
 export interface IOptions {
   immediate?: boolean
@@ -14,13 +15,14 @@ export function useFetchProduct() {
   const isLoading = ref(false)
   const errMessage = ref('')
 
-  async function getProducts(productType: ProductType): Promise<void> {
+  async function getProducts(categoryId: MaybeRefOrGetter<string>): Promise<void> {
     try {
+      const id = String(toValue(categoryId))
       isLoading.value = true
       if (!api.value) {
         return
       }
-      items.value = (await api.value.get<IProductBase[]>(`/products/type/${productType}`)).data
+      items.value = (await api.value.get<IProductBase[]>(`/products/type/${id}`)).data
     } catch (error) {
       if (axios.isAxiosError(error)) {
         errMessage.value = error.response?.data ?? error.message

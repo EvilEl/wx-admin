@@ -19,7 +19,7 @@ export function useApiProduct() {
         name: product.name,
         count: product.count,
         price: product.price,
-        type: product.type,
+        categoryId: product.categoryId,
       }
       const res = await api.value?.post<{ id: number }>('/products', data)
       if (res) {

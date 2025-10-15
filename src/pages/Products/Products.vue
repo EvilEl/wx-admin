@@ -11,12 +11,12 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useApiProduct } from '@/composables/useApiProduct'
+import { useCategories } from '@/composables/useCategories'
 import { useFetchProduct } from '@/composables/useFetchProduct'
 import type { IProductBase } from '@/interfaces/Product'
-import { useProduct } from '../Product/composables/useProduct'
 
 const { items, getProducts, isLoading } = useFetchProduct()
-const { products, selectedProduct } = useProduct()
+const { categories, selectedCategory } = useCategories()
 const { updateProduct } = useApiProduct()
 
 async function handleUpdateItem(item: IProductBase) {
@@ -32,20 +32,20 @@ async function handleUpdateItem(item: IProductBase) {
   })
 }
 
-watch(selectedProduct, getProducts)
+watch(selectedCategory, getProducts)
 </script>
 
 <template>
   <div class="p-10">
-    <Select v-model="selectedProduct">
+    <Select v-model="selectedCategory">
       <SelectTrigger class="w-full">
         <SelectValue placeholder="Выберите продукт" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Выберите продукт</SelectLabel>
-          <SelectItem v-for="product of products" :key="product.id" :value="product.id">
-            {{ product.text }}
+          <SelectLabel>Выберите категорию продукта</SelectLabel>
+          <SelectItem v-for="product of categories" :key="product.id" :value="product.id">
+            {{ product.name }}
           </SelectItem>
         </SelectGroup>
       </SelectContent>
